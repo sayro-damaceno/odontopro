@@ -70,7 +70,7 @@ export function Header() {
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild className="md:hidden">
             <Button
-              className="cursor-pointer text-black hover:bg-transparent"
+              className="text-black hover:bg-transparent"
               variant="ghost"
               size="icon"
             >
