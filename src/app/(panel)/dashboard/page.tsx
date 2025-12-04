@@ -2,7 +2,10 @@ export default function Dashboard() {
   return (
     <main>
       <h1>Welcome to the Dashboard Page</h1>
-      <p>This is the main landing page of the application.</p>
+
+      <div className="w-full h-[600px] bg-gray-200 mb-10"></div>
+      <div className="w-full h-[600px] bg-gray-500 mb-10"></div>
+      <div className="w-full h-[600px] bg-gray-200 mb-10"></div>
     </main>
   )
 }
