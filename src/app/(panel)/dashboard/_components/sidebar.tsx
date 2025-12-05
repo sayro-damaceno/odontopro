@@ -11,15 +11,142 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
-import { Banknote, CalendarCheck2, Folder, List, Settings } from 'lucide-react'
+import {
+  Banknote,
+  CalendarCheck2,
+  ChevronLeft,
+  ChevronRight,
+  Folder,
+  List,
+  Settings,
+} from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
+import logoOdonto from '@/../public/logo-odonto.png'
+import { Collapsible, CollapsibleContent } from '@radix-ui/react-collapsible'
 
 export function SidebarDashboard({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const [isCollapsed] = React.useState(false)
+  const [isCollapsed, setIsCollapsed] = React.useState(false)
 
   return (
     <div className="flex min-h-screen w-full">
+      <aside
+        className={clsx(
+          'flex flex-col border-r bg-background transition-all duration-300 p-4 h-full',
+          {
+            'w-20': isCollapsed,
+            'w-64': !isCollapsed,
+            'hidden md:flex md:fixed': true,
+          }
+        )}
+      >
+        <div className="mb-6 mt-4">
+          {!isCollapsed && (
+            <Image
+              src={logoOdonto}
+              alt="Logo OdontoPRO"
+              priority
+              quality={100}
+            />
+          )}
+        </div>
+
+        <Button
+          asChild
+          className="bg-gray-100 hover:bg-gray-50 text-zinc-900 self-end mb-2 shadow-sm"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+        >
+          {isCollapsed ? (
+            <ChevronRight className="w-12 h-12" />
+          ) : (
+            <ChevronLeft className="w-12 h-12" />
+          )}
+        </Button>
+
+        {isCollapsed && (
+          <nav className="flex flex-col gap-1 overflow-hidden mt-2">
+            <SidebarLink
+              href="/dashboard"
+              icon={<CalendarCheck2 />}
+              label="Agendamentos"
+              pathname={pathname}
+              isCollapsed={isCollapsed}
+            />
+
+            <SidebarLink
+              href="/dashboard/services"
+              icon={<Folder />}
+              label="Serviços"
+              pathname={pathname}
+              isCollapsed={isCollapsed}
+            />
+
+            <SidebarLink
+              href="/dashboard/profile"
+              icon={<Settings />}
+              label="Meu Perfil"
+              pathname={pathname}
+              isCollapsed={isCollapsed}
+            />
+
+            <SidebarLink
+              href="/dashboard/plans"
+              icon={<Banknote />}
+              label="Planos"
+              pathname={pathname}
+              isCollapsed={isCollapsed}
+            />
+          </nav>
+        )}
+
+        <Collapsible open={!isCollapsed}>
+          <CollapsibleContent>
+            <nav className="flex flex-col gap-1 overflow-hidden">
+              <span className="text-sm text-gray-400 font-medium mt-1 uppercase">
+                Painel
+              </span>
+
+              <SidebarLink
+                href="/dashboard"
+                icon={<CalendarCheck2 />}
+                label="Agendamentos"
+                pathname={pathname}
+                isCollapsed={isCollapsed}
+              />
+
+              <SidebarLink
+                href="/dashboard/services"
+                icon={<Folder />}
+                label="Serviços"
+                pathname={pathname}
+                isCollapsed={isCollapsed}
+              />
+
+              <span className="text-sm text-gray-400 font-medium mt-1 uppercase">
+                Configurações
+              </span>
+
+              <SidebarLink
+                href="/dashboard/profile"
+                icon={<Settings />}
+                label="Meu Perfil"
+                pathname={pathname}
+                isCollapsed={isCollapsed}
+              />
+
+              <SidebarLink
+                href="/dashboard/plans"
+                icon={<Banknote />}
+                label="Planos"
+                pathname={pathname}
+                isCollapsed={isCollapsed}
+              />
+            </nav>
+          </CollapsibleContent>
+        </Collapsible>
+      </aside>
+
       <div
         className={clsx('flex flex-1 flex-col transition-all duration-300', {
           'md:ml-20': isCollapsed,
@@ -114,7 +241,9 @@ function SidebarLink({
         )}
       >
         <span className="w-6 h-6">{icon}</span>
-        {!isCollapsed && <span>{label}</span>}
+        {!isCollapsed && (
+          <span className="overflow-hidden whitespace-nowrap">{label}</span>
+        )}
       </div>
     </Link>
   )
