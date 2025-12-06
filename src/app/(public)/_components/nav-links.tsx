@@ -3,17 +3,18 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { LogIn } from 'lucide-react'
-import { Session } from 'next-auth'
 import { handleRegister } from '../_actions/login'
+import { useSession } from 'next-auth/react'
 
 const navItems = [{ href: '#profissionais', label: 'Profissionais' }]
 
 interface NavLinksProps {
   setIsOpen: (open: boolean) => void
-  session: Session | null | undefined
 }
 
-export function NavLinks({ setIsOpen, session }: NavLinksProps) {
+export function NavLinks({ setIsOpen }: NavLinksProps) {
+  const { data: session, status } = useSession()
+
   async function handleLogin() {
     await handleRegister('Github')
   }
@@ -33,10 +34,12 @@ export function NavLinks({ setIsOpen, session }: NavLinksProps) {
         </Button>
       ))}
 
-      {session ? (
+      {status === 'loading' ? (
+        <></>
+      ) : session ? (
         <Link
           href="/dashboard"
-          className="flex items-center justify-center gap-2"
+          className="flex items-center justify-center gap-2 bg-zinc-900 text-white py-2 rounded-md px-4"
         >
           Acessar clínica
         </Link>

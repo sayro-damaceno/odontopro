@@ -12,12 +12,9 @@ import {
 } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import { Menu } from 'lucide-react'
-import { useSession } from 'next-auth/react'
 import { NavLinks } from './nav-links'
 
 export function Header() {
-  const { data: session } = useSession()
-
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -28,7 +25,7 @@ export function Header() {
         </Link>
 
         <nav className="hidden md:flex items-center space-x-4">
-          <NavLinks setIsOpen={setIsOpen} session={session} />
+          <NavLinks setIsOpen={setIsOpen} />
         </nav>
 
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -48,7 +45,7 @@ export function Header() {
             <SheetDescription>Veja nossos links</SheetDescription>
 
             <nav className="flex flex-col space-y-4">
-              <NavLinks setIsOpen={setIsOpen} session={session} />
+              <NavLinks setIsOpen={setIsOpen} />
             </nav>
           </SheetContent>
         </Sheet>
