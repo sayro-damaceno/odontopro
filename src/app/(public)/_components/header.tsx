@@ -11,50 +11,14 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
-import { LogIn, Menu } from 'lucide-react'
-
-const navItems = [{ href: '#profissionais', label: 'Profissionais' }]
-
-const NavLinks = ({
-  setIsOpen,
-  session,
-}: {
-  setIsOpen: (open: boolean) => void
-  session: boolean
-}) => (
-  <>
-    {navItems.map((item) => (
-      <Button
-        key={item.href}
-        asChild
-        className="bg-transparent hover:bg-transparent text-black shadow-none text-base font-normal"
-        onClick={() => setIsOpen(false)}
-      >
-        <Link href={item.href} className="">
-          {item.label}
-        </Link>
-      </Button>
-    ))}
-
-    {session ? (
-      <Link
-        href="/dashboard"
-        className="flex items-center justify-center gap-2"
-      >
-        Acessar clínica
-      </Link>
-    ) : (
-      <Button>
-        <LogIn />
-        Portal da clínica
-      </Button>
-    )}
-  </>
-)
+import { Menu } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import { NavLinks } from './nav-links'
 
 export function Header() {
+  const { data: session } = useSession()
+
   const [isOpen, setIsOpen] = useState(false)
-  const [session] = useState(null)
 
   return (
     <header className="fixed top-0 left-0 right-0 z-999 py-4 px-6 bg-white">
@@ -64,7 +28,7 @@ export function Header() {
         </Link>
 
         <nav className="hidden md:flex items-center space-x-4">
-          <NavLinks setIsOpen={setIsOpen} session={!!session} />
+          <NavLinks setIsOpen={setIsOpen} session={session} />
         </nav>
 
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -84,7 +48,7 @@ export function Header() {
             <SheetDescription>Veja nossos links</SheetDescription>
 
             <nav className="flex flex-col space-y-4">
-              <NavLinks setIsOpen={setIsOpen} session={!!session} />
+              <NavLinks setIsOpen={setIsOpen} session={session} />
             </nav>
           </SheetContent>
         </Sheet>
