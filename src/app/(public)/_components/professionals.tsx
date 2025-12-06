@@ -16,15 +16,8 @@ export default function Professionals() {
           <Card className="p-0 overflow-hidden">
             <CardContent className="p-0">
               <div>
-                {/* <div className="relative h-48"> */}
                 <div>
-                  <Image
-                    src={fotoImg}
-                    alt="Foto da clínica"
-                    // fill
-                    // className="object-contain"
-                    // className="rounded-md"
-                  />
+                  <Image src={fotoImg} alt="Foto da clínica" />
                 </div>
               </div>
 
@@ -38,7 +31,7 @@ export default function Professionals() {
                     </p>
                   </div>
 
-                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
+                  <div className="w-2.5 h-2.5 ms-2 rounded-full bg-emerald-500"></div>
                 </div>
 
                 <Link
@@ -70,7 +63,7 @@ export default function Professionals() {
                     </p>
                   </div>
 
-                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
+                  <div className="w-2.5 h-2.5 ms-2 rounded-full bg-emerald-500"></div>
                 </div>
 
                 <Link
