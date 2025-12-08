@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { ReactNode, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
 import {
@@ -25,9 +25,9 @@ import Image from 'next/image'
 import logoOdonto from '@/../public/logo-odonto.png'
 import { Collapsible, CollapsibleContent } from '@radix-ui/react-collapsible'
 
-export function SidebarDashboard({ children }: { children: React.ReactNode }) {
+export function SidebarDashboard({ children }: { children: ReactNode }) {
   const pathname = usePathname()
-  const [isCollapsed, setIsCollapsed] = React.useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(false)
 
   return (
     <div className="flex min-h-screen w-full">
@@ -157,7 +157,12 @@ export function SidebarDashboard({ children }: { children: React.ReactNode }) {
           <Sheet>
             <div className="flex items-center gap-4">
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon" className="md:hidden">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="md:hidden"
+                  onClick={() => setIsCollapsed(false)}
+                >
                   <List className="w-5 h-5" />
                 </Button>
               </SheetTrigger>
