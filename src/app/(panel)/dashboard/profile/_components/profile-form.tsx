@@ -3,14 +3,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 const profileSchema = z.object({
-  name: z.string().min(1),
+  name: z.string().min(1, { message: 'O nome é obrigatório.' }),
   address: z.string().optional(),
   phone: z.string().optional(),
   status: z.string(),
-  timeZone: z.string().min(1),
+  timeZone: z.string().min(1, { message: 'O fuso horário é obrigatório.' }),
 })
 
-type ProfileFormData = z.infer<typeof profileSchema>
+export type ProfileFormData = z.infer<typeof profileSchema>
 
 export function useProfileForm() {
   return useForm<ProfileFormData>({

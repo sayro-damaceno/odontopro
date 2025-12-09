@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useProfileForm } from './profile-form'
+import { ProfileFormData, useProfileForm } from './profile-form'
 import {
   Form,
   FormControl,
@@ -71,10 +71,14 @@ export function ProfileContent() {
       zone.startsWith('America/Santarem')
   )
 
+  async function onSubmit(values: ProfileFormData) {
+    console.log('Form Values:', values)
+  }
+
   return (
     <div className="mx-auto">
       <Form {...form}>
-        <form>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <Card>
             <CardHeader>
               <CardTitle>Meu Perfil</CardTitle>
@@ -251,13 +255,14 @@ export function ProfileContent() {
                             </SelectContent>
                           </Select>
                         </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
 
                   <Button
                     type="submit"
-                    className="w-full bg-emerald-500 hover:bg-emerald-400"
+                    className="w-full bg-emerald-500 hover:bg-emerald-400 cursor-pointer"
                   >
                     Salvar alterações
                   </Button>
