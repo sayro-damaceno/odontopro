@@ -32,12 +32,27 @@ import {
 import { Button } from '@/components/ui/button'
 import { ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Prisma } from '@/generated/prisma/client'
 
-export function ProfileContent() {
-  const [selectedHours, setSelectedHours] = useState<string[]>([])
+type UserWithSubscription = Prisma.UserGetPayload<{
+  include: { subscription: true }
+}>
+
+interface ProfileContentProps {
+  user: UserWithSubscription
+}
+
+export function ProfileContent({ user }: ProfileContentProps) {
+  const [selectedHours, setSelectedHours] = useState<string[]>(user.times || [])
   const [dialogIsOpen, setDialogIsOpen] = useState(false)
 
-  const form = useProfileForm()
+  const form = useProfileForm({
+    name: user.name,
+    address: user.address,
+    phone: user.phone,
+    status: user.status,
+    timeZone: user.timezone,
+  })
 
   function generateTimeSlots(): string[] {
     const hours = []
@@ -72,7 +87,10 @@ export function ProfileContent() {
   )
 
   async function onSubmit(values: ProfileFormData) {
-    console.log('Form Values:', values)
+    const profileDate = {
+      ...values,
+      times: selectedHours,
+    }
   }
 
   return (
@@ -156,7 +174,9 @@ export function ProfileContent() {
                         <FormControl>
                           <Select
                             onValueChange={field.onChange}
-                            defaultValue={field.value ? 'active' : 'inactive'}
+                            defaultValue={
+                              field.value ? field.value : 'inactive'
+                            }
                           >
                             <SelectTrigger className="w-full">
                               <SelectValue placeholder="Selecione o status da clínica..." />
