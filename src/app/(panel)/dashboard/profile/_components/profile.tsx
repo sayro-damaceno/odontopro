@@ -91,6 +91,8 @@ export function ProfileContent({ user }: ProfileContentProps) {
       ...values,
       times: selectedHours,
     }
+
+    console.log('Profile Data to submit:', profileDate)
   }
 
   return (
@@ -105,7 +107,7 @@ export function ProfileContent({ user }: ProfileContentProps) {
                 <div className="flex justify-center">
                   <div className="bg-gray-200 relative h-40 w-40 rounded-full overflow-hidden">
                     <Image
-                      src={imageTest}
+                      src={user.image || imageTest}
                       alt="Foto da Clinica"
                       fill
                       className="object-cover"
