@@ -34,6 +34,8 @@ import { ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Prisma } from '@/generated/prisma/client'
 import { updateProfile } from '../_actions/update-profile'
+import { toast } from 'sonner'
+import { formatPhone } from '@/utils/formatPhone'
 
 type UserWithSubscription = Prisma.UserGetPayload<{
   include: { subscription: true }
@@ -97,7 +99,12 @@ export function ProfileContent({ user }: ProfileContentProps) {
       times: selectedHours || [],
     })
 
-    console.log('response:', response)
+    if (response.error) {
+      toast.error(response.error)
+      return
+    }
+
+    toast.success(response.data)
   }
 
   return (
@@ -164,7 +171,11 @@ export function ProfileContent({ user }: ProfileContentProps) {
                         <FormControl>
                           <Input
                             {...field}
-                            placeholder="Digite o telefone..."
+                            placeholder="(99) 99999-9999"
+                            onChange={(e) => {
+                              const formattedValue = formatPhone(e.target.value)
+                              field.onChange(formattedValue)
+                            }}
                           />
                         </FormControl>
                         <FormMessage />
