@@ -26,10 +26,21 @@ import { toast } from 'sonner'
 
 interface DialogServiceProps {
   closeModal: () => void
+  serviceId?: string
+  initialValues?: {
+    name: string
+    price: string
+    hours: string
+    minutes: string
+  }
 }
 
-export function DialogService({ closeModal }: DialogServiceProps) {
-  const form = useDialogServiceForm()
+export function DialogService({
+  closeModal,
+  serviceId,
+  initialValues,
+}: DialogServiceProps) {
+  const form = useDialogServiceForm({ initialValues })
   const [loading, setLoading] = useState(false)
 
   async function onSubmit(values: DialogServiceFormData) {
