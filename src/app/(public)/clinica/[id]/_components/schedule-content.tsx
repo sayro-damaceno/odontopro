@@ -4,6 +4,18 @@ import Image from 'next/image'
 import imgTeste from '@/../public/foto1.png'
 import { MapPin } from 'lucide-react'
 import { Prisma } from '@/generated/prisma/client'
+import { useAppointmentForm, AppointmentFormData } from './schedule-form'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { formatPhone } from '@/utils/formatPhone'
 
 type UserWithServiceAndSubscription = Prisma.UserGetPayload<{
   include: {
@@ -17,7 +29,7 @@ interface ScheduleContentProps {
 }
 
 export function ScheduleContent({ clinic }: ScheduleContentProps) {
-  console.log(clinic)
+  const form = useAppointmentForm()
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -44,6 +56,70 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
             </div>
           </article>
         </div>
+      </section>
+
+      <section className="max-w-2xl mx-auto w-full mt-6">
+        <Form {...form}>
+          <form className="mx-2 space-y-6 bg-white p-6 border rounded-md shadow-sm flex flex-col gap-1">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem className="my-2">
+                  <FormLabel>Nome completo:</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="name"
+                      placeholder="Digite seu nome completo..."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem className="my-2">
+                  <FormLabel>Email:</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="email"
+                      placeholder="Digite seu email..."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem className="my-2">
+                  <FormLabel>Telefone:</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      id="phone"
+                      placeholder="(xx) xxxxx-xxxx"
+                      onChange={(e) => {
+                        const formattedPhone = formatPhone(e.target.value)
+                        field.onChange(formattedPhone)
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
       </section>
     </div>
   )
