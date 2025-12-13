@@ -4,8 +4,7 @@ import Image from 'next/image'
 import imgTeste from '@/../public/foto1.png'
 import { MapPin } from 'lucide-react'
 import { Prisma } from '@/generated/prisma/client'
-import { useAppointmentForm, AppointmentFormData } from './schedule-form'
-import { Button } from '@/components/ui/button'
+import { useAppointmentForm } from './schedule-form'
 import { Input } from '@/components/ui/input'
 import {
   Form,
@@ -16,6 +15,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { formatPhone } from '@/utils/formatPhone'
+import { DateTimePicker } from './date-picker'
 
 type UserWithServiceAndSubscription = Prisma.UserGetPayload<{
   include: {
@@ -111,6 +111,28 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
                       onChange={(e) => {
                         const formattedPhone = formatPhone(e.target.value)
                         field.onChange(formattedPhone)
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="date"
+              render={({ field }) => (
+                <FormItem className="flex items-center gap-2">
+                  <FormLabel>Data do agendamento:</FormLabel>
+                  <FormControl>
+                    <DateTimePicker
+                      initialDate={new Date()}
+                      className="w-full rounded border p-2"
+                      onChange={(date) => {
+                        if (date) {
+                          field.onChange(date)
+                        }
                       }}
                     />
                   </FormControl>
