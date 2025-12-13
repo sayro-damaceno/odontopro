@@ -23,6 +23,7 @@ import { Button } from '@/components/ui/button'
 import { convertRealToCents } from '@/utils/convertCurrency'
 import { createNewService } from '../_actions/create-service'
 import { toast } from 'sonner'
+import { updateService } from '../_actions/update-service'
 
 interface DialogServiceProps {
   closeModal: () => void
@@ -51,6 +52,16 @@ export function DialogService({
 
     const duration = hours * 60 + minutes
 
+    if (serviceId) {
+      await editServiceById({
+        serviceId,
+        name: values.name,
+        priceInCents,
+        duration,
+      })
+      return
+    }
+
     const response = await createNewService({
       name: values.name,
       price: priceInCents,
@@ -66,6 +77,35 @@ export function DialogService({
     }
 
     toast.success('Serviço cadastrado com sucesso!')
+    handleCloseModal()
+  }
+
+  async function editServiceById({
+    serviceId,
+    name,
+    priceInCents,
+    duration,
+  }: {
+    serviceId: string
+    name: string
+    priceInCents: number
+    duration: number
+  }) {
+    const response = await updateService({
+      serviceId,
+      name,
+      price: priceInCents,
+      duration,
+    })
+
+    setLoading(false)
+
+    if (response.error) {
+      toast.error(response.error)
+      return
+    }
+
+    toast.success(response.data)
     handleCloseModal()
   }
 
@@ -169,7 +209,9 @@ export function DialogService({
             type="submit"
             className="w-full text-white font-semibold"
           >
-            {loading ? 'Cadastrando...' : 'Adicionar serviço'}
+            {loading
+              ? 'Carregando...'
+              : `${serviceId ? 'Atualizar' : 'Cadastrar'} serviço`}
           </Button>
         </form>
       </Form>

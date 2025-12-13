@@ -35,7 +35,15 @@ export function ServicesList({ services }: ServicesListProps) {
   }
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <Dialog
+      open={isDialogOpen}
+      onOpenChange={(open) => {
+        setIsDialogOpen(open)
+        if (!open) {
+          setEditingService(null)
+        }
+      }}
+    >
       <section className="mx-auto">
         <Card>
           <CardHeader className="flex items-center justify-between">
@@ -48,9 +56,18 @@ export function ServicesList({ services }: ServicesListProps) {
               </Button>
             </DialogTrigger>
 
-            <DialogContent>
+            <DialogContent
+              onInteractOutside={(e) => {
+                e.preventDefault()
+                setIsDialogOpen(false)
+                setEditingService(null)
+              }}
+            >
               <DialogService
-                closeModal={() => setIsDialogOpen(false)}
+                closeModal={() => {
+                  setIsDialogOpen(false)
+                  setEditingService(null)
+                }}
                 serviceId={editingService ? editingService.id : undefined}
                 initialValues={
                   editingService
