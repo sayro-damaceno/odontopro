@@ -4,7 +4,7 @@ import Image from 'next/image'
 import imgTeste from '@/../public/foto1.png'
 import { MapPin } from 'lucide-react'
 import { Prisma } from '@/generated/prisma/client'
-import { useAppointmentForm } from './schedule-form'
+import { AppointmentFormData, useAppointmentForm } from './schedule-form'
 import { Input } from '@/components/ui/input'
 import {
   Form,
@@ -23,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Button } from '@/components/ui/button'
 
 type UserWithServiceAndSubscription = Prisma.UserGetPayload<{
   include: {
@@ -37,6 +38,10 @@ interface ScheduleContentProps {
 
 export function ScheduleContent({ clinic }: ScheduleContentProps) {
   const form = useAppointmentForm()
+
+  async function handleRegisterAppointment(formData: AppointmentFormData) {
+    console.log(formData)
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -67,7 +72,10 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
 
       <section className="max-w-2xl mx-auto w-full mt-6">
         <Form {...form}>
-          <form className="mx-2 space-y-6 bg-white p-6 border rounded-md shadow-sm flex flex-col gap-1">
+          <form
+            onSubmit={form.handleSubmit(handleRegisterAppointment)}
+            className="mx-2 space-y-6 bg-white p-6 border rounded-md shadow-sm flex flex-col gap-1"
+          >
             <FormField
               control={form.control}
               name="name"
@@ -174,6 +182,20 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
                 </FormItem>
               )}
             />
+
+            {clinic.status ? (
+              <Button
+                type="submit"
+                className="w-full bg-emerald-500 hover:bg-emerald-400"
+                disabled={!form.formState.isValid}
+              >
+                Realizar agendamento
+              </Button>
+            ) : (
+              <p className="bg-red-500 text-white rounded-md text-center px-4 py-2 font-bold">
+                Clínica fechada no momento.
+              </p>
+            )}
           </form>
         </Form>
       </section>
