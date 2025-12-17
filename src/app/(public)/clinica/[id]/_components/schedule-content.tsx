@@ -27,6 +27,8 @@ import {
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { ScheduleTimeList } from './schedule-time-list'
+import { createAppointment } from '../_actions/create-appointments'
+import { toast } from 'sonner'
 
 type UserWithServiceAndSubscription = Prisma.UserGetPayload<{
   include: {
@@ -88,12 +90,41 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
         }))
 
         setAvailableTimeSlots(finalSlots)
+
+        const stillAvailable = finalSlots.find(
+          (slot) => slot.time === selectedTime && slot.available
+        )
+
+        if (!stillAvailable) {
+          setSelectedTime('')
+        }
       })
     }
   }, [selectedDate, fetchBlockedTimes, clinic.times, selectedTime])
 
   async function handleRegisterAppointment(formData: AppointmentFormData) {
-    console.log(formData)
+    if (!selectedTime) {
+      return
+    }
+
+    const response = await createAppointment({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      time: selectedTime,
+      date: formData.date,
+      serviceId: formData.serviceId,
+      clinicId: clinic.id,
+    })
+
+    if (response.error) {
+      toast.error(response.error)
+      return
+    }
+
+    toast.success('Agendamento realizado com sucesso!')
+    form.reset()
+    setSelectedTime('')
   }
 
   return (

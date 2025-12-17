@@ -62,17 +62,8 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // appointments.forEach((apt) => {
-    //   const startIndex = user.times.indexOf(apt.time)
-    //   if (startIndex !== -1) {
-    //     const requiredSlots = Math.ceil(apt.service.duration / 30)
-    //     user.times
-    //       .slice(startIndex, startIndex + requiredSlots)
-    //       .forEach((slot) => blockedTimes.add(slot))
-    //   }
-    // })
-
     const blockedTimes = Array.from(blockedSlots)
+    console.log('blockedTimes', blockedTimes)
 
     return NextResponse.json(blockedTimes)
   } catch (error) {
