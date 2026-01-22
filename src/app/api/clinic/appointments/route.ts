@@ -6,7 +6,7 @@ export const GET = auth(async function GET(request) {
   if (!request.auth)
     return NextResponse.json(
       { error: 'Acesso não autorizado!' },
-      { status: 401 }
+      { status: 401 },
     )
 
   const searchParams = request.nextUrl.searchParams
@@ -20,14 +20,14 @@ export const GET = auth(async function GET(request) {
   if (!clinicId) {
     return NextResponse.json(
       { error: 'Usuário não encontrado' },
-      { status: 400 }
+      { status: 400 },
     )
   }
 
   try {
     const [year, month, day] = dateString.split('-').map(Number)
-    const startDate = new Date(year, month - 1, day, 0, 0, 0, 0)
-    const endDate = new Date(year, month - 1, day, 23, 59, 59, 999)
+    const startDate = new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0))
+    const endDate = new Date(Date.UTC(year, month - 1, day, 23, 59, 59, 999))
 
     const appointments = await prisma.appointment.findMany({
       where: {
@@ -47,7 +47,7 @@ export const GET = auth(async function GET(request) {
     console.error('Error fetching appointments:', error)
     return NextResponse.json(
       { error: 'Erro ao buscar agendamentos.' },
-      { status: 400 }
+      { status: 400 },
     )
   }
 })
