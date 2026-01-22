@@ -99,6 +99,16 @@ export function AppointmentsList({ times }: AppointmentsListProps) {
                   </div>
                 )
               }
+
+              return (
+                <div
+                  key={slot}
+                  className="flex items-center py-2 border-t last:border-b"
+                >
+                  <div className="w-16 text-sm font-semibold">{slot}</div>
+                  <div className="flex-1 text-sm">Disponível</div>
+                </div>
+              )
             })
           )}
         </ScrollArea>
