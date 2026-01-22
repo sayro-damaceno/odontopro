@@ -9,14 +9,14 @@ export async function GET(request: NextRequest) {
   if (!userId || userId === 'null' || !dateParam || dateParam === 'null') {
     return NextResponse.json(
       { error: 'Nenhum agendamento encontrado.' },
-      { status: 400 }
+      { status: 400 },
     )
   }
 
   try {
     const [year, month, day] = dateParam.split('-').map(Number)
-    const startDate = new Date(year, month - 1, day, 0, 0, 0)
-    const endDate = new Date(year, month - 1, day, 23, 59, 59, 999)
+    const startDate = new Date(Date.UTC(year, month - 1, day, 0, 0, 0))
+    const endDate = new Date(Date.UTC(year, month - 1, day, 23, 59, 59, 999))
 
     const user = await prisma.user.findFirst({
       where: {
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     if (!user) {
       return NextResponse.json(
         { error: 'Nenhum agendamento encontrado.' },
-        { status: 400 }
+        { status: 400 },
       )
     }
 
@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
     console.error('Search error:', error)
     return NextResponse.json(
       { error: 'Nenhum agendamento encontrado.' },
-      { status: 400 }
+      { status: 400 },
     )
   }
 }
