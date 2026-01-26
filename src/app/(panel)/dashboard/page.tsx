@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation'
 import { ButtonCopyLink } from './_components/button-copy-link'
 import { Reminders } from './_components/reminder/reminders'
 import { Appointments } from './_components/appointments/appointments'
+import { Suspense } from 'react'
 
 export default async function Dashboard() {
   const session = await getSession()
@@ -28,8 +29,13 @@ export default async function Dashboard() {
       </div>
 
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-2 mt-4">
-        <Appointments userId={session.user?.id} />
-        <Reminders userId={session.user?.id} />
+        <Suspense fallback={<div>Carregando...</div>}>
+          <Appointments userId={session.user?.id} />
+        </Suspense>
+
+        <Suspense fallback={<div>Carregando...</div>}>
+          <Reminders userId={session.user?.id} />
+        </Suspense>
       </section>
     </main>
   )
