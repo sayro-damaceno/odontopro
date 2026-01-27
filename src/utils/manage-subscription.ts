@@ -1,0 +1,76 @@
+import prisma from '@/lib/prisma'
+import { stripe } from './stripe'
+import { Plan } from '@/generated/prisma/enums'
+
+/**
+ * CRUD operations for managing subscriptions in Stripe and syncing with the database.
+ *
+ */
+
+export async function manageSubscription(
+  subscriptionId: string,
+  customerId: string,
+  createAction = false,
+  deleteAction = false,
+  type?: Plan,
+) {
+  const findUser = await prisma.user.findFirst({
+    where: {
+      stripeCustomerId: customerId,
+    },
+  })
+
+  if (!findUser) {
+    return Response.json(
+      { error: 'Falha ao realizar assinatura' },
+      { status: 400 },
+    )
+  }
+
+  const subscription = await stripe.subscriptions.retrieve(subscriptionId)
+
+  const subscriptionData = {
+    id: subscription.id,
+    userId: findUser.id,
+    status: subscription.status,
+    priceId: subscription.items.data[0].price.id,
+    plan: type ?? 'BASIC',
+  }
+
+  if (subscriptionId && deleteAction) {
+    await prisma.subscription.delete({
+      where: {
+        id: subscriptionId,
+      },
+    })
+    return
+  }
+
+  if (createAction) {
+    try {
+      prisma.subscription.create({
+        data: subscriptionData,
+      })
+    } catch (error) {
+      console.error('Error creating subscription:', error)
+    }
+  } else {
+    try {
+      const findSubscription = await prisma.subscription.findFirst({
+        where: { id: subscriptionId },
+      })
+
+      if (!findSubscription) return
+
+      await prisma.subscription.update({
+        where: { id: findSubscription.id },
+        data: {
+          status: subscription.status,
+          priceId: subscription.items.data[0].price.id,
+        },
+      })
+    } catch (error) {
+      console.error('Error finding subscription:', error)
+    }
+  }
+}
