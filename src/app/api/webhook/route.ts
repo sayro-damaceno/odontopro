@@ -44,6 +44,7 @@ export const POST = async (request: Request) => {
       break
 
     case 'checkout.session.completed':
+      console.log('CHECKOUT SESSION COMPLETED WEBHOOK RECEIVED')
       const checkoutSession = event.data.object as Stripe.Checkout.Session
       const type = checkoutSession?.metadata?.type
         ? checkoutSession?.metadata?.type

@@ -48,7 +48,7 @@ export async function manageSubscription(
 
   if (createAction) {
     try {
-      prisma.subscription.create({
+      await prisma.subscription.create({
         data: subscriptionData,
       })
     } catch (error) {
