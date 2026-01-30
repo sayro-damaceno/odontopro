@@ -1,9 +1,10 @@
 import { auth } from '@/lib/auth'
-import { PlanDetailInfo } from './get-plans'
 import prisma from '@/lib/prisma'
 import { canCreateService } from './canCreateService'
+import { PlanDetailInfo } from './plans-config'
 
 export type PLAN_PROP = 'BASIC' | 'PROFESSIONAL' | 'TRIAL' | 'EXPIRED'
+type TypeCheck = 'service'
 
 export interface ResultPermissionProps {
   hasPermission: boolean
@@ -13,7 +14,7 @@ export interface ResultPermissionProps {
 }
 
 interface CanPermissionsProps {
-  type: string
+  type: TypeCheck
 }
 
 export async function canPermissions({
