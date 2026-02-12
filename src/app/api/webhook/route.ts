@@ -66,5 +66,6 @@ export const POST = async (request: Request) => {
       console.log('Unhandled event type: ', event.type)
   }
 
+  revalidatePath('/dashboard/plans')
   return NextResponse.json({ received: true })
 }
