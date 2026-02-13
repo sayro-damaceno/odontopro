@@ -11,8 +11,6 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import Image from 'next/image'
-import imageTest from '@/../public/foto1.png'
 import { Input } from '@/components/ui/input'
 import {
   Select,
@@ -38,6 +36,7 @@ import { toast } from 'sonner'
 import { formatPhone } from '@/utils/formatPhone'
 import { signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { AvatarProfile } from './profile-avatar'
 
 type UserWithSubscription = Prisma.UserGetPayload<{
   include: { subscription: true }
@@ -77,7 +76,7 @@ export function ProfileContent({ user }: ProfileContentProps) {
     setSelectedHours((prev) =>
       prev.includes(hour)
         ? prev.filter((h) => h !== hour)
-        : [...prev, hour].sort()
+        : [...prev, hour].sort(),
     )
   }
 
@@ -90,7 +89,7 @@ export function ProfileContent({ user }: ProfileContentProps) {
       zone.startsWith('America/Belem') ||
       zone.startsWith('America/Recife') ||
       zone.startsWith('America/Bahia') ||
-      zone.startsWith('America/Santarem')
+      zone.startsWith('America/Santarem'),
   )
 
   async function onSubmit(values: ProfileFormData) {
@@ -127,14 +126,7 @@ export function ProfileContent({ user }: ProfileContentProps) {
 
               <CardContent className="space-y-6">
                 <div className="flex justify-center">
-                  <div className="bg-gray-200 relative h-40 w-40 rounded-full overflow-hidden">
-                    <Image
-                      src={user.image || imageTest}
-                      alt="Foto da Clinica"
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
+                  <AvatarProfile avatarUrl={user.image} userId={user.id} />
                 </div>
 
                 <div className="space-y-4">
@@ -259,7 +251,7 @@ export function ProfileContent({ user }: ProfileContentProps) {
                                 className={cn(
                                   'h-10',
                                   selectedHours.includes(hour) &&
-                                    'border-2 border-emerald-500 text-primary'
+                                    'border-2 border-emerald-500 text-primary',
                                 )}
                                 onClick={() => toggleHour(hour)}
                               >
