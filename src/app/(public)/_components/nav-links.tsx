@@ -16,7 +16,7 @@ export function NavLinks({ setIsOpen }: NavLinksProps) {
   const { data: session, status } = useSession()
 
   async function handleLogin() {
-    await handleRegister('Github')
+    await handleRegister('google')
   }
 
   return (
